@@ -1,8 +1,6 @@
-__author__ = 'm.bashari'
 import numpy as np
 from sklearn import datasets, linear_model
 import matplotlib.pyplot as plt
-
 
 class Config:
     nn_input_dim = 2  # input layer dimensionality
@@ -11,12 +9,10 @@ class Config:
     epsilon = 0.01  # learning rate for gradient descent
     reg_lambda = 0.01  # regularization strength
 
-
 def generate_data():
     np.random.seed(0)
     X, y = datasets.make_moons(200, noise=0.20)
     return X, y
-
 
 def visualize(X, y, model):
     # plt.scatter(X[:, 0], X[:, 1], s=40, c=y, cmap=plt.cm.Spectral)
@@ -40,8 +36,7 @@ def plot_decision_boundary(pred_func, X, y):
     plt.scatter(X[:, 0], X[:, 1], c=y, cmap=plt.cm.Spectral)
     plt.show()
 
-
-# Helper function to evaluate the total loss on the dataset
+# evaluate the total loss on the dataset
 def calculate_loss(model, X, y):
     num_examples = len(X)  # training set size
     W1, b1, W2, b2 = model['W1'], model['b1'], model['W2'], model['b2']
@@ -58,7 +53,6 @@ def calculate_loss(model, X, y):
     data_loss += Config.reg_lambda / 2 * (np.sum(np.square(W1)) + np.sum(np.square(W2)))
     return 1. / num_examples * data_loss
 
-
 def predict(model, x):
     W1, b1, W2, b2 = model['W1'], model['b1'], model['W2'], model['b2']
     # Forward propagation
@@ -71,9 +65,6 @@ def predict(model, x):
 
 
 # This function learns parameters for the neural network and returns the model.
-# - nn_hdim: Number of nodes in the hidden layer
-# - num_passes: Number of passes through the training data for gradient descent
-# - print_loss: If True, print the loss every 1000 iterations
 def build_model(X, y, nn_hdim, num_passes=20000, print_loss=False):
     # Initialize the parameters to random values. We need to learn these.
     num_examples = len(X)
@@ -88,7 +79,6 @@ def build_model(X, y, nn_hdim, num_passes=20000, print_loss=False):
 
     # Gradient descent. For each batch...
     for i in range(0, num_passes):
-
         # Forward propagation
         z1 = X.dot(W1) + b1
         a1 = np.tanh(z1)
@@ -119,18 +109,15 @@ def build_model(X, y, nn_hdim, num_passes=20000, print_loss=False):
         model = {'W1': W1, 'b1': b1, 'W2': W2, 'b2': b2}
 
         # Optionally print the loss.
-        # This is expensive because it uses the whole dataset, so we don't want to do it too often.
         if print_loss and i % 1000 == 0:
             print("Loss after iteration %i: %f" % (i, calculate_loss(model, X, y)))
 
     return model
 
-
 def classify(X, y):
     # clf = linear_model.LogisticRegressionCV()
     # clf.fit(X, y)
     # return clf
-
     pass
 
 
@@ -138,7 +125,6 @@ def main():
     X, y = generate_data()
     model = build_model(X, y, 3, print_loss=True)
     visualize(X, y, model)
-
 
 if __name__ == "__main__":
     main()
